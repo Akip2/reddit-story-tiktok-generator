@@ -1,0 +1,4 @@
+praw
+dotenv
+edge_tts
+asyncio

@@ -1,11 +1,13 @@
 from config import CLIENT_ID, PASSWORD, REDDIT_USERNAME, CLIENT_SECRET
-import praw
+from voice_maker import create_audio
+import praw, asyncio
 
-ATTRACTIVE_POST_LENGTH = 1200
+ATTRACTIVE_POST_LENGTH = 800
 POST_LIMIT = None
 
 SUBS = [
-    "confession",
+    "stories",
+    "RedditStoryTime",
     "tifu",
     "LetsNotMeet",
     "TrueOffMyChest"
@@ -57,4 +59,6 @@ for sub_name in SUBS:
      
     print(best_post.title + "("+best_post.url+")\n")
     print(best_post.selftext)
+    
+    asyncio.run(create_audio(best_post.selftext))
     print("----------------------------------------------------------")
