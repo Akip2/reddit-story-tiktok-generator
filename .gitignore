@@ -197,4 +197,5 @@ speech/
 Scripts/
 share/
 Include/
+output/
 pyvenv.cfg

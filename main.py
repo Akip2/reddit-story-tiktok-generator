@@ -1,5 +1,6 @@
 from config import CLIENT_ID, PASSWORD, REDDIT_USERNAME, CLIENT_SECRET
 from voice_maker import create_audio
+from video_editor import generate_video_from_audio
 import praw, asyncio
 
 ATTRACTIVE_POST_LENGTH = 800
@@ -60,5 +61,7 @@ for sub_name in SUBS:
     print(best_post.title + "("+best_post.url+")\n")
     print(best_post.selftext)
     
-    asyncio.run(create_audio(best_post.selftext))
+    audio_file = asyncio.run(create_audio(best_post.selftext))
+    generate_video_from_audio(audio_file)
+    
     print("----------------------------------------------------------")
