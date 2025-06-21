@@ -9,7 +9,7 @@ def get_random_gameplay():
 
 def get_audio_duration(audio_path: str) -> float:
     audio = MP3(audio_path)
-    return audio.info.length  # durée en secondes
+    return audio.info.length
 
 def get_video_duration(video_path: str) -> float:
     probe = ffmpeg.probe(video_path)
