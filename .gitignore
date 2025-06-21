@@ -198,4 +198,5 @@ Scripts/
 share/
 Include/
 output/
+gameplay/
 pyvenv.cfg
