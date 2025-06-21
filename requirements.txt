@@ -4,3 +4,4 @@ edge_tts
 asyncio
 ffmpeg
 mutagen
+openai-whisper
