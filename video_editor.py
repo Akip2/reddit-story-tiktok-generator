@@ -18,12 +18,28 @@ def get_video_duration(video_path: str) -> float:
     probe = ffmpeg.probe(video_path)
     return float(probe["format"]["duration"])
 
-def generate_subtitles(audio_path: str):
-    transcription = model.transcribe(audio_path, fp16=False)
+def generate_srt_file(audio_path: str) -> str:
+    transcription = model.transcribe(audio_path, fp16=False, language="en")
+    
+    filename = "subtitles.srt"
     sub_writer = get_writer("srt", "./output")
-    sub_writer(transcription, "subtitles.srt")
+    sub_writer(transcription, filename)
+    
+    return "./output/"+filename
 
-def generate_video_from_audio(audio_path: str):
+def add_subtitles_to_video(video_path: str, sub_path: str):
+    temp_path = video_path + ".temp.mp4"
+
+    ffmpeg.input(video_path).output(
+        temp_path,
+        vf=f"subtitles={sub_path}",
+        vcodec='libx264',
+        acodec='copy'
+    ).run()
+
+    os.replace(temp_path, video_path)
+    
+def add_gameplay_to_audio(audio_path: str) -> str:
     video_path = get_random_gameplay()
     audio_duration = get_audio_duration(audio_path)
     video_duration = get_video_duration(video_path)
@@ -47,3 +63,11 @@ def generate_video_from_audio(audio_path: str):
         .output(video_stream, audio_stream, filename, vcodec='libx264', acodec='aac')
         .run()
     )
+    
+    return filename
+
+def generate_video_from_audio(audio_path: str):
+    video_path = add_gameplay_to_audio(audio_path)
+    sub_path = generate_srt_file(audio_path)
+    
+    add_subtitles_to_video(video_path, sub_path)
