@@ -3,13 +3,12 @@ from voice_maker import create_audio
 from video_editor import generate_video_from_audio
 import praw, asyncio
 
-ATTRACTIVE_POST_LENGTH = 800
+ATTRACTIVE_POST_WORD_COUNT = 180
 POST_LIMIT = None
 
 SUBS = [
     "stories",
     "RedditStoryTime",
-    "tifu",
     "LetsNotMeet",
     "TrueOffMyChest"
 ]
@@ -26,10 +25,10 @@ def calculate_score(post) -> float:
     else:
         score += (1 - ratio) * 10
         
-    score += num_comments # Valorizing posts with lots of comments
+    score += max(num_comments, 100) # Valorizing posts with lots of comments
     
-    postLenDif = max(abs(ATTRACTIVE_POST_LENGTH - len(text)), 1)
-    score += (1 / postLenDif) * 30 # Valorizing posts with a number of chars close to the one we want
+    postLenDif = max(abs(ATTRACTIVE_POST_WORD_COUNT - len(text.split())), 1)
+    score += (1 / postLenDif) * 100 # Valorizing posts with a number of words close to the one we want
     
     return score
 
